@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    body {
+        background: linear-gradient(to right, #f8f9fa, #ffffff);
+    }
+
+    .request-card {
+        max-width: 600px;
+        margin: auto;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .btn-danger {
+        border-radius: 30px;
+        padding: 10px 30px;
+        font-weight: 500;
+    }
+</style>
+
+<div class="container py-5">
+
+    <div class="card request-card p-5 border-0">
+
+        <h2 class="text-center text-danger fw-bold mb-4">
+             Request Blood
+        </h2>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Blood Group</label>
+                <input type="text" name="blood_group" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Hospital Name</label>
+                <input type="text" name="hospital_name" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Patient Name</label>
+                <input type="text" name="patient_name" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Contact Number</label>
+                <input type="text" name="contact_number" class="form-control" required>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Address</label>
+                <textarea name="address" rows="3" class="form-control" required></textarea>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger">
+                    Submit Request
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

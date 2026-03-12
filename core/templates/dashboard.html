@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-5">
+
+    <h2 class="text-center fw-bold mb-5" style="color:#c82333;">
+        Dashboard Overview
+    </h2>
+
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 text-center p-4 stat-card">
+                <div class="mb-2 fs-1 text-danger">🩸</div>
+                <h6 class="text-muted">Total Donors</h6>
+                <h3 class="fw-bold">{{ total_donors }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 text-center p-4 stat-card">
+                <div class="mb-2 fs-1 text-primary">📋</div>
+                <h6 class="text-muted">Total Requests</h6>
+                <h3 class="fw-bold">{{ total_requests }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 text-center p-4 stat-card">
+                <div class="mb-2 fs-1 text-warning">⏳</div>
+                <h6 class="text-muted">Pending</h6>
+                <h3 class="fw-bold">{{ pending_count }}</h3>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card shadow border-0 text-center p-4 stat-card">
+                <div class="mb-2 fs-1 text-success">✔</div>
+                <h6 class="text-muted">Approved</h6>
+                <h3 class="fw-bold">{{ approved_count }}</h3>
+            </div>
+        </div>
+        
+    </div>
+
+    <!-- Chart Section -->
+    <div class="card shadow border-0 p-4 mb-5 text-center">
+        <h5 class="fw-bold mb-4">Blood Request Statistics</h5>
+    
+        <div style="max-width: 350px; margin: auto;">
+            <canvas id="requestChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Action Button -->
+    <div class="text-center">
+        <a href="{% url 'request_blood' %}" class="btn btn-danger btn-lg px-5 shadow">
+            Make Blood Request
+        </a>
+    </div>
+
+</div>
+
+<div class="card shadow border-0 p-4 mb-5">
+    <h5 class="fw-bold text-warning mb-3">Pending Requests</h5>
+
+    {% if pending_requests %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-warning">
+                <tr>
+                    <th>Patient</th>
+                    <th>Blood Group</th>
+                    <th>Hospital</th>
+                    <th>Contact</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in pending_requests %}
+                <tr>
+                    <td>{{ req.patient_name }}</td>
+                    <td>{{ req.blood_group }}</td>
+                    <td>{{ req.hospital_name }}</td>
+                    <td>{{ req.contact_number }}</td>
+                    <td>
+                    <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#approveModal"data-id="{{ req.id }}">
+                    Approve
+                    </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted">No pending requests.</p>
+    {% endif %}
+</div>
+
+<div class="card shadow border-0 p-4 mb-5">
+    <h5 class="fw-bold text-success mb-3">Approved Requests</h5>
+
+    {% if approved_requests %}
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-success">
+                <tr>
+                    <th>Patient</th>
+                    <th>Blood Group</th>
+                    <th>Hospital</th>
+                    <th>Contact</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in approved_requests %}
+                <tr>
+                    <td>{{ req.patient_name }}</td>
+                    <td>{{ req.blood_group }}</td>
+                    <td>{{ req.hospital_name }}</td>
+                    <td>{{ req.contact_number }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p class="text-muted">No approved requests.</p>
+    {% endif %}
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('requestChart');
+
+    new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Pending', 'Approved'],
+        datasets: [{
+            data: [{{ pending_count }}, {{ approved_count }}]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true
+    }
+});
+</script>
+
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .stat-card {
+        border-radius: 15px;
+        transition: 0.3s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+
+<!-- Approve Confirmation Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <div class="modal-header bg-success text-white">
+          <h5 class="modal-title">Confirm Approval</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <div class="modal-body">
+          Are you sure you want to approve this request?
+        </div>
+  
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+  
+          <form method="POST" id="approveForm">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">
+              Yes, Approve
+            </button>
+          </form>
+        </div>
+  
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const approveModal = document.getElementById('approveModal');
+    approveModal.addEventListener('show.bs.modal', function (event) {
+  
+      const button = event.relatedTarget;
+      const requestId = button.getAttribute('data-id');
+  
+      const form = document.getElementById('approveForm');
+      form.action = `/approve/${requestId}/`;
+    });
+  </script>
+  
+{% endblock %}

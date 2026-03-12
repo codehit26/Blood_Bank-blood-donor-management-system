@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .home-bg {
+    background: url("{% static 'images/blood_bg.jpg' %}") no-repeat center center;
+    background-size: cover;
+    min-height: 100vh;
+    }
+
+    .home-overlay {
+    background: rgba(0,0,0,0.6);
+    min-height: 100vh;
+    }
+
+
+</style>
+{% endblock %}
+
+
+{% block content %}
+<div class="home-bg d-flex align-items-center">
+    <div class="home-overlay w-100 d-flex align-items-center">
+        <div class="container text-center text-white">
+
+            <h1 class="display-4 text-danger fw-bold">
+                Blood Bank Management System
+            </h1>
+
+            <p class="lead mb-4">
+                Connecting Donors with Patients Easily
+            </p>
+
+            <a href="{% url 'register' %}" class="btn btn-danger btn-lg m-2">
+                Become a Donor
+            </a>
+
+            <a href="{% url 'search' %}" class="btn btn-outline-light btn-lg m-2">
+                Search Donor
+            </a>
+
+            <hr class="border-light my-5">
+
+            <h2 class="text-danger">About Us</h2>
+            <p>
+                Our goal is to make blood searching simple, fast, and accessible.
+                This system connects donors and patients efficiently and helps save lives.
+            </p>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

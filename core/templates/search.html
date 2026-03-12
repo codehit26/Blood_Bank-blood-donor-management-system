@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="text-center text-danger">Search Donor</h2>
+
+<div class="card p-4 shadow mb-4">
+    <form method="GET">
+
+        <div class="row">
+
+            <!-- Blood Group Dropdown -->
+            <div class="col-md-5">
+                <label>Blood Group</label>
+                <select name="blood_group" class="form-control">
+                    <option value="">Select Blood Group</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                </select>
+            </div>
+
+            <!-- Name Input -->
+            <div class="col-md-5">
+                <label>Name</label>
+                <input type="text" name="full_name" class="form-control" placeholder="Enter Name">
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-danger w-100">Search</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<!-- Show Results -->
+{% if donors %}
+<div class="row">
+    {% for donor in donors %}
+    <div class="col-md-4">
+        <div class="card shadow mb-3">
+            <div class="card-body">
+                <h5 class="card-title text-danger">{{ donor.full_name }}</h5>
+                <p><strong>Blood Group:</strong> {{ donor.blood_group }}</p>
+                <p><strong>Phone:</strong> {{ donor.phone }}</p>
+                <p><strong>Address:</strong> {{ donor.address }}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% elif donors is not None %}
+<p class="text-center text-muted">No donors found.</p>
+{% endif %}
+
+{% endblock %}
