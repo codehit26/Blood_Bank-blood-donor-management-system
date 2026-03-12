@@ -1,41 +1,26 @@
 A web-based Blood Bank Management System developed using Django.
-This application helps connect blood donors with patients by allowing users to register as donors, search donors by blood group or name, and manage blood requests through a dashboard.
 
-The system aims to simplify the process of finding blood donors during emergencies.
+Features
 
-Features:
-Donor registration system
+. Donor registration system
 
-Search donors by blood group and name
+. Search donors by blood group and name
 
-Blood request submission
+. Blood request submission
 
-Login and logout authentication
+. Login and logout authentication
 
-Dashboard with statistics
+. Dashboard with statistics
 
-View pending and approved requests
+. View pending and approved requests
 
-Approve blood requests from dashboard
+. Approve blood requests from dashboard
 
-Tech Stack:
 
-Backend
+Tech Stack
 
-Python
+. Backend: Python, Django
 
-Django
+. Frontend: HTML, CSS, JavaScript, Bootstrap
 
-Frontend
-
-HTML
-
-CSS
-
-JavaScript
-
-Bootstrap
-
-Database
-
-SQLite (default Django database)
+. Database: SQLite
